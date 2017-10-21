@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="{{ block "layout-html-lang" . }}en{{ end }}">
+    <head>
+        <title>{{ block "layout-title" . }}Title layout{{ end }}</title>
+
+        <!-- Required meta tags for Bootstrap -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+        {{ block "layout-head" . }}{{ end }}
+    </head>
+    <body>
+        <div class="container">
+            {{ template "components/nav.html" }}
+
+            {{ block "layout-content" . }}{{ end }}
+        </div>
+
+        <script src="/js/main.js"></script>
+
+        {{ block "layout-script" . }}{{ end }}
+    </body>
+</html>

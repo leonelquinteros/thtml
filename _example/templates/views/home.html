@@ -1,0 +1,9 @@
+{{ template "layouts/default.html" }}
+
+{{ define "layout-content" }}
+    <div class="row">
+        <div class="col-md-12">
+            {{ block "view-content" . }}{{ end }}
+        </div>
+    </div>
+{{ end }}
