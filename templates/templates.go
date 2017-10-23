@@ -1,7 +1,6 @@
 package templates
 
 import (
-	"errors"
 	"io"
 	"io/ioutil"
 	"log"
@@ -12,7 +11,7 @@ import (
 	"text/template"
 )
 
-// Service ...
+// Service wraps multiple templates within a directory
 type Service struct {
 	sync.Mutex
 
@@ -20,7 +19,7 @@ type Service struct {
 	tpl *template.Template
 }
 
-// Load ...
+// Load creates a new *templates.Service object and loads the templates in the provided directory.
 func Load(dir string) (*Service, error) {
 	s := new(Service)
 	err := s.Load(dir)
@@ -31,7 +30,7 @@ func Load(dir string) (*Service, error) {
 	return s, nil
 }
 
-// Load ...
+// Load takes a directory path and loads all templates on it.
 func (s *Service) Load(dir string) (err error) {
 	s.Lock()
 	defer s.Unlock()
@@ -45,7 +44,7 @@ func (s *Service) Load(dir string) (err error) {
 	// Init template
 	s.tpl = template.New(s.dir)
 
-	err = filepath.Walk(s.dir, s.walkFn)
+	err = filepath.Walk(s.dir, s.loadFn)
 	if err != nil {
 		return err
 	}
@@ -53,7 +52,7 @@ func (s *Service) Load(dir string) (err error) {
 	return nil
 }
 
-func (s *Service) walkFn(path string, info os.FileInfo, err error) error {
+func (s *Service) loadFn(path string, info os.FileInfo, err error) error {
 	if !info.IsDir() {
 		// Load content
 		content, err := ioutil.ReadFile(path)
@@ -77,7 +76,7 @@ func (s *Service) walkFn(path string, info os.FileInfo, err error) error {
 	return nil
 }
 
-// Render ...
+// Render compiles the provided template filename in the loaded templates and writes the output to the provided io.Writer.
 func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 	fn, err := filepath.Abs(filename)
 	if err != nil {
@@ -90,7 +89,7 @@ func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 	}
 
 	if s.tpl == nil {
-		return errors.New("Template not loaded")
+		return NewEmptyTemplateError()
 	}
 
 	// Copy Template
@@ -109,5 +108,28 @@ func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 		return err
 	}
 
+	return nil
+}
+
+// Build compiles all files in the provided directory and outputs the results to the build dir.
+func (s *Service) Build(dir string) error {
+	if s.tpl == nil {
+		return NewEmptyTemplateError()
+	}
+
+	dn, err := filepath.Abs(dir)
+	if err != nil {
+		return err
+	}
+
+	err = filepath.Walk(dn, s.buildFn)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *Service) buildFn(path string, info os.FileInfo, err error) error {
 	return nil
 }
