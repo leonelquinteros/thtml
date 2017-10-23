@@ -69,6 +69,6 @@ type EmptyTemplateError struct {
 // NewEmptyTemplateError returns a new EmptyTemplateError object
 func NewEmptyTemplateError() EmptyTemplateError {
 	return EmptyTemplateError{
-		TError: NewError("Empty template. Call templates.Service.Load(path)."),
+		TError: NewError("Empty template. Call templates.Service.Load(): https://godoc.org/github.com/leonelquinteros/thtml/templates#Service.Load"),
 	}
 }
