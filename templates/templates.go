@@ -234,10 +234,21 @@ func (s *Service) Build(in, out string) (err error) {
 }
 
 func (s *Service) buildFn(filename string, info os.FileInfo, err error) error {
+	// Ensure directories
 	if !info.IsDir() {
 		// Create output
 		in := strings.TrimPrefix(filename, s.publicDir)
-		out := path.Join(s.buildDir, in)
+		out, err := filepath.Abs(path.Join(s.buildDir, in))
+		if err != nil {
+			return err
+		}
+
+		err = os.MkdirAll(path.Dir(out), 0755)
+		if err != nil {
+			return err
+		}
+
+		// Open file
 		f, err := os.OpenFile(out, os.O_RDWR|os.O_CREATE, 0755)
 		if err != nil {
 			return err
@@ -245,7 +256,8 @@ func (s *Service) buildFn(filename string, info os.FileInfo, err error) error {
 		defer f.Close()
 
 		// Render
-		return s.Render(f, in, nil)
+
+		return s.Render(f, filename, nil)
 	}
 
 	return nil
