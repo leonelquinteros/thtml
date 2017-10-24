@@ -8,6 +8,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 
 	"github.com/leonelquinteros/thtml/templates"
@@ -49,8 +50,11 @@ func (h thtmlHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Check if file exists and if it's a file
 	if info, err := os.Stat(p); err == nil && !info.IsDir() {
+		// Load comma separated extensions list
+		exts := strings.Split(_exts, ",")
+
 		// Load templates
-		tpl, err := templates.Load(_templatesPath)
+		tpl, err := templates.Load(_templatesPath, exts...)
 		if err != nil {
 			log.Fatalf("Error loading templates from '%s': %s", _templatesPath, err)
 		}

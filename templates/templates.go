@@ -58,6 +58,7 @@ func Load(dir string, extensions ...string) (*Service, error) {
 
 // AddExtension adds a new filename extension (i.e. ".txt") to the list of extensions to support.
 // Extensions not supported will be rendered and/or compiled as they are without template parsing.
+// This method is safe to use from multiple/concurrent goroutines.
 func (s *Service) AddExtension(ext string) {
 	// Sync
 	s.Lock()
@@ -80,6 +81,7 @@ func (s *Service) AddExtension(ext string) {
 }
 
 // RemoveExtension deletes a supported filename extension from the list.
+// This method is safe to use from multiple/concurrent goroutines.
 func (s *Service) RemoveExtension(ext string) {
 	s.Lock()
 	defer s.Unlock()
@@ -93,6 +95,7 @@ func (s *Service) RemoveExtension(ext string) {
 }
 
 // ValidExtension returns true if the filename extension provided is supported.
+// This method is safe to use from multiple/concurrent goroutines.
 func (s *Service) ValidExtension(ext string) bool {
 	s.Lock()
 	defer s.Unlock()
@@ -107,19 +110,20 @@ func (s *Service) ValidExtension(ext string) bool {
 }
 
 // Load takes a directory path and loads all templates on it.
-func (s *Service) Load(dir string) (err error) {
-	// Parse dir
-	s.Lock()
+// This method is NOT safe to use from multiple/concurrent goroutines
+func (s *Service) Load(dir string) error {
+	var err error
+
+	// Parse dir name
 	s.tplDir, err = filepath.Abs(dir)
 	if err != nil {
-		s.Unlock()
 		return err
 	}
 
 	// Init template
 	s.tpl = template.New(s.tplDir)
-	s.Unlock()
 
+	// Load
 	err = filepath.Walk(s.tplDir, s.loadFn)
 	if err != nil {
 		return err
@@ -137,9 +141,6 @@ func (s *Service) loadFn(path string, info os.FileInfo, err error) error {
 		}
 
 		// Set tpl name
-		s.Lock()
-		defer s.Unlock()
-
 		n := strings.TrimPrefix(path, s.tplDir)
 		for len(n) > 0 && n[0] == '/' {
 			n = n[1:]
@@ -156,9 +157,13 @@ func (s *Service) loadFn(path string, info os.FileInfo, err error) error {
 }
 
 // Render compiles the provided template filename in the loaded templates and writes the output to the provided io.Writer.
+// This method is safe to use from multiple/concurrent goroutines
 func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 	// Check load
-	if s.tpl == nil {
+	s.Lock()
+	empty := (s.tpl == nil)
+	s.Unlock()
+	if empty {
 		return NewEmptyTemplateError()
 	}
 
@@ -178,9 +183,11 @@ func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 	if s.ValidExtension(filepath.Ext(fn)) {
 		// Copy template object
 		s.Lock()
-		tmp := *s.tpl
-		tmpTpl := &tmp
+		tmpTpl, err := s.tpl.Clone()
 		s.Unlock()
+		if err != nil {
+			return err
+		}
 
 		// Parse template
 		_, err = tmpTpl.New(fn).Parse(string(content))
@@ -203,6 +210,7 @@ func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 }
 
 // Build compiles all files in the provided directory and outputs the results to the build dir.
+// This method is NOT safe to use from multiple/concurrent goroutines
 func (s *Service) Build(in, out string) (err error) {
 	if s.tpl == nil {
 		return NewEmptyTemplateError()

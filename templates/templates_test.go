@@ -1,6 +1,7 @@
 package templates
 
 import (
+	"bytes"
 	"sync"
 	"testing"
 
@@ -40,11 +41,54 @@ func TestExtensions(t *testing.T) {
 	}
 }
 
-func TestExtensionsRace(t *testing.T) {
+func TestLoad(t *testing.T) {
+	// Load service
+	s := new(Service)
+	s.AddExtension(".html")
+
+	err := s.Load("../_example/templates")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	loaded := s.tpl.Templates()
+	expected := []string{
+		"components/nav.html",
+		"layouts/default.html",
+		"views/primary.html",
+	}
+
+	for _, e := range expected {
+		found := false
+		for _, l := range loaded {
+			if e == l.Name() {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("Expected template %s to be loaded, but not found", e)
+		}
+	}
+}
+
+func TestRender(t *testing.T) {
+
+}
+
+func TestRace(t *testing.T) {
 	wg := new(sync.WaitGroup)
 
+	// Load service
 	s := new(Service)
-	for i := 0; i < 10000; i++ {
+	s.AddExtension(".html")
+	err := s.Load("../_example/templates")
+	if err != nil {
+		t.Error(err)
+	}
+
+	// Run basic operations in 1000 goroutines
+	for i := 0; i < 1000; i++ {
 		ext, err := gorand.GetAlphaString(3)
 		if err != nil {
 			t.Error(err)
@@ -52,13 +96,20 @@ func TestExtensionsRace(t *testing.T) {
 		ext = "." + ext
 
 		wg.Add(1)
-		go func() {
+		go func(s *Service) {
 			s.AddExtension(ext)
 			s.ValidExtension(ext)
 			s.RemoveExtension(ext)
 
+			buff := &bytes.Buffer{}
+			err = s.Render(buff, "../_example/public/index.html", nil)
+			if err != nil {
+				t.Error(err)
+			}
+			buff.Reset()
+
 			wg.Done()
-		}()
+		}(s)
 	}
 
 	wg.Wait()
