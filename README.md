@@ -5,7 +5,8 @@
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/leonelquinteros/thtml)](https://goreportcard.com/report/github.com/leonelquinteros/thtml)
 
-Static site generator with Go's text/template syntax and development webserver integrated. 
+
+Static site generator based on Go's text/template with development web server integrated. 
 
 
 ## Install
@@ -36,4 +37,4 @@ OPTIONS:
 
 [![GoDoc](https://godoc.org/github.com/leonelquinteros/thtml/templates?status.svg)](https://godoc.org/github.com/leonelquinteros/thtml/templates)
 
-TODO
+...

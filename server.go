@@ -38,7 +38,6 @@ func (h thtmlHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Catch routes without ".html" and dir names without /index.html
 	if info, err := os.Stat(p); err != nil || info.IsDir() {
-		log.Printf("No file %s", p)
 		if info, err := os.Stat(p + ".html"); err == nil && !info.IsDir() {
 			p += ".html"
 		} else if info, err := os.Stat(p + "index.html"); err == nil && !info.IsDir() {
@@ -85,6 +84,8 @@ func (h thtmlHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		// Flush
 		w.Write(content)
+	} else {
+		w.WriteHeader(404)
 	}
 }
 

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{ block "layout-html-lang" . }}en{{ end }}">
     <head>
-        <title>{{ block "layout-title" . }}Title layout{{ end }}</title>
+        <title>{{ block "layout-title" . }}{{ end }} - Layout title</title>
 
         <!-- Required meta tags for Bootstrap -->
         <meta charset="utf-8">
@@ -14,6 +14,13 @@
     </head>
     <body>
         <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <small>
+                        The layout is rendered from <em>templates/layouts/default.html</em>
+                    </small>
+                </div>
+            </div>
             {{ template "components/nav.html" }}
 
             {{ block "layout-content" . }}{{ end }}

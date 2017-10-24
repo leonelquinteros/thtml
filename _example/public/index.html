@@ -1,4 +1,4 @@
-{{ template "views/home.html" }}
+{{ template "views/primary.html" }}
 
 {{ define "layout-title" }}Index title{{ end }}
 
@@ -6,6 +6,18 @@
 
     <h1>Home page</h1>
 
-    <button class="btn btn-primary">Click me!</button>
+    <p>
+        <small>
+            This page is rendered from <em>public/index.html</em>
+        </small>
+    </p>
+
+    <p>
+        <img class="img-fluid" src="/img/bg-banner.jpg" alt="Image" />
+
+        <br />
+        <br />
+        <button class="btn btn-primary">I'm a button!</button>
+    </p>
 
 {{ end }}
