@@ -8,7 +8,7 @@
 //
 // [COMMAND] can be the following:
 //
-//	    -build
+//      -build
 //	        Build the assets from the [-public] directory to the [-output] directory by parsing the [-templates] directory.
 //
 //      -run
