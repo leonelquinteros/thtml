@@ -1,3 +1,33 @@
+// Package templates compiles all templates in a directory tree into a Service
+// that provides a Render method to execute other templates inside its context.
+//
+// Example
+//
+// The following example program will load a template directory tree defined as a constant
+// and then render a template file from another directory using the loaded Service into the standard output.
+//
+//  package main
+//
+//  import (
+//      "os"
+//      "path"
+//      "github.com/leonelquinteros/thtml/templates"
+//  )
+//
+//  const (
+//      _templates = "/path/to/templates"
+//		_public    = "/path/to/web/root"
+//  )
+//
+//  func main() {
+//      tplService, err := templates.Load(_templates, ".html,.css,.js")
+//      if err != nil {
+//          panic(err.Error())
+//      }
+//
+//      tplService.Render(os.Stdout, path.Join(_public, "index.html"), nil)
+//  }
+//
 package templates
 
 import (
@@ -16,7 +46,8 @@ const (
 	defaultExtensions string = ".thtml .html .js .css"
 )
 
-// Service wraps multiple templates within a directory
+// Service is the template handler.
+// After Load()'ing a directory tree, will be ready to render any template into its context.
 type Service struct {
 	sync.Mutex
 
