@@ -1,3 +1,8 @@
+// thtml is a static website generator based on text/template package.
+//
+// Includes a development webserver to help creating HTML websites and components
+// compiling the templates on the fight, allowing a edit-save-refresh development process.
+//
 package main
 
 import (
@@ -49,7 +54,12 @@ func main() {
 	flag.Parse()
 
 	if !_run && !_build {
-		usage()
+		fmt.Println("")
+		fmt.Println("Run:")
+		fmt.Println("     ", os.Args[0], "-h")
+		fmt.Println("")
+		fmt.Println("To view help")
+		fmt.Println("")
 		return
 	}
 
@@ -62,13 +72,4 @@ func main() {
 	if _run {
 		runServer()
 	}
-}
-
-func usage() {
-	fmt.Println("")
-	fmt.Println("Run:")
-	fmt.Println("     ", os.Args[0], "-h")
-	fmt.Println("")
-	fmt.Println("To see information about parameters")
-	fmt.Println("")
 }
