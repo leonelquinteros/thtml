@@ -16,11 +16,11 @@
 //
 //  const (
 //      _templates = "/path/to/templates"
-//		_public    = "/path/to/web/root"
+//      _public    = "/path/to/web/root"
 //  )
 //
 //  func main() {
-//      tplService, err := templates.Load(_templates, ".html,.css,.js")
+//      tplService, err := templates.Load(_templates)
 //      if err != nil {
 //          panic(err.Error())
 //      }
