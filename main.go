@@ -8,30 +8,31 @@
 //
 // [COMMAND] can be the following:
 //
-//		-build
-//			Build the assets from the [-public] directory to the [-output] directory by parsing the [-templates] directory.
-//  	-run
-//			Run development webserver listening to [-listen] to build pages on-the-fly.
+//	    -build
+//	        Build the assets from the [-public] directory to the [-output] directory by parsing the [-templates] directory.
+//
+//      -run
+//	        Run development webserver listening to [-listen] to build pages on-the-fly.
 //
 // [OPTIONS] are:
 //
-//  	-exts string
-// 	    	Provides a comma separated filename extensions list to support when parsing templates. (default ".thtml,.html,.css,.js")
+//      -exts string
+// 	        Provides a comma separated filename extensions list to support when parsing templates. (default ".thtml,.html,.css,.js")
 //
-//  	-listen string
-// 	 		Run the dev server listening on the provided host:port. (default ":5500")
+//      -listen string
+// 	        Run the dev server listening on the provided host:port. (default ":5500")
 //
-//  	-minify
-// 	  		Minify the build output. (default true)
+//      -minify
+// 	        Minify the build output. (default true)
 //
-//  	-output string
-// 	  		Sets the path for the build output. (default "build")
+//      -output string
+// 	        Sets the path for the build output. (default "build")
 //
-//  	-public string
-// 	  		Sets the path for the web root. (default "public")
+//      -public string
+// 	        Sets the path for the web root. (default "public")
 //
-//		- templates string
-// 	  		Sets the path for the template files. (default "templates")
+//      - templates string
+// 	        Sets the path for the template files. (default "templates")
 //
 //
 //
