@@ -36,7 +36,7 @@
 //
 //
 //
-// Getting started:
+// Getting started
 //
 // By running `thtml -run` on a directory, the tool will use the default options that assume the following directory structure:
 //
@@ -60,10 +60,11 @@
 //
 //
 //
-// Template syntax:
+// Template syntax
 //
 // THTML uses pure Go's text/template package to render the templates together.
 // Check the package documentation for details about the syntax: https://golang.org/pkg/text/template/
+//
 //
 package main
 
