@@ -73,7 +73,23 @@ func TestLoad(t *testing.T) {
 }
 
 func TestRender(t *testing.T) {
+	// Load service
+	s := new(Service)
+	s.AddExtension(".html")
+	s.AddExtension(".css")
+	s.AddExtension(".js")
 
+	err := s.Load("../_example/templates")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	buff := &bytes.Buffer{}
+	err = s.Render(buff, "../_example/public/index.html", nil)
+	if err != nil {
+		t.Error(err)
+	}
+	buff.Reset()
 }
 
 func TestRace(t *testing.T) {
