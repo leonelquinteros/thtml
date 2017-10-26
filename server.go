@@ -34,19 +34,8 @@ func (h thtmlHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s", r.Method, r.URL.String())
 	}()
 
-	// Try to render public file
-	p := path.Clean(_publicPath + r.URL.EscapedPath())
-
-	// Catch routes without ".html" and dir names without /index.html
-	if info, err := os.Stat(p); err != nil || info.IsDir() {
-		if info, err := os.Stat(p + ".html"); err == nil && !info.IsDir() {
-			p += ".html"
-		} else if info, err := os.Stat(p + "index.html"); err == nil && !info.IsDir() {
-			p += "index.html"
-		} else if info, err := os.Stat(p + "/index.html"); err == nil && !info.IsDir() {
-			p += "/index.html"
-		}
-	}
+	// Construct path
+	p := h.cleanPath(_publicPath + r.URL.EscapedPath())
 
 	// Check if file exists and if it's a file
 	if info, err := os.Stat(p); err == nil && !info.IsDir() {
@@ -91,6 +80,24 @@ func (h thtmlHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.WriteHeader(404)
 	}
+}
+
+// cleanPath normalizes requeste filenames
+func (h thtmlHandler) cleanPath(p string) string {
+	p = path.Clean(p)
+
+	// Catch routes without ".html" and dir names without /index.html
+	if info, err := os.Stat(p); err != nil || info.IsDir() {
+		if info, err := os.Stat(p + ".html"); err == nil && !info.IsDir() {
+			p += ".html"
+		} else if info, err := os.Stat(p + "index.html"); err == nil && !info.IsDir() {
+			p += "index.html"
+		} else if info, err := os.Stat(p + "/index.html"); err == nil && !info.IsDir() {
+			p += "/index.html"
+		}
+	}
+
+	return p
 }
 
 func runServer() {
