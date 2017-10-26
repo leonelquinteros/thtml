@@ -31,7 +31,7 @@
 //  -public string
 // 	    Sets the path for the web root. (default "public")
 //
-//  - templates string
+//  -templates string
 // 	    Sets the path for the template files. (default "templates")
 //
 //
