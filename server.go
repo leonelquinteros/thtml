@@ -48,6 +48,9 @@ func (h thtmlHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			log.Fatalf("Error loading templates from '%s': %s", _templatesPath, err)
 		}
 
+		// Configure
+		tpl.Minify(_minify)
+
 		// Render to buffer
 		buff := new(bytes.Buffer)
 		err = tpl.Render(buff, p, nil)

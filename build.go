@@ -17,6 +17,9 @@ func build() {
 		log.Fatalf("Error loading templates from '%s': %s", _templatesPath, err)
 	}
 
+	// Configure
+	tpl.Minify(_minify)
+
 	// Build
 	err = tpl.Build(_publicPath, _outputPath)
 	if err != nil {

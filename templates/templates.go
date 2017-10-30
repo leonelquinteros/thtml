@@ -40,6 +40,11 @@ import (
 	"strings"
 	"sync"
 	"text/template"
+
+	"github.com/tdewolff/minify"
+	"github.com/tdewolff/minify/css"
+	"github.com/tdewolff/minify/html"
+	"github.com/tdewolff/minify/js"
 )
 
 const (
@@ -60,8 +65,11 @@ type Service struct {
 	// Build input directory
 	publicDir string
 
-	// Build output
+	// Build output directory
 	buildDir string
+
+	// Minify output
+	minify bool
 
 	// Template wrapper
 	tpl *template.Template
@@ -85,6 +93,11 @@ func Load(dir string, extensions ...string) (*Service, error) {
 	}
 
 	return s, nil
+}
+
+// Minify sets the configuration to minify the output
+func (s *Service) Minify(m bool) {
+	s.minify = m
 }
 
 // AddExtension adds a new filename extension (i.e. ".txt") to the list of extensions to support.
@@ -148,7 +161,7 @@ func (s *Service) Load(dir string) error {
 	// Parse dir name
 	s.tplDir, err = filepath.Abs(dir)
 	if err != nil {
-		return err
+		return NewError("Error locating template directory " + dir + ": " + err.Error())
 	}
 
 	// Init template
@@ -157,7 +170,7 @@ func (s *Service) Load(dir string) error {
 	// Load
 	err = filepath.Walk(s.tplDir, s.loadFn)
 	if err != nil {
-		return err
+		return NewError("Error loading templates from " + dir + ": " + err.Error())
 	}
 
 	return nil
@@ -201,11 +214,11 @@ func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 	// Load content
 	fn, err := filepath.Abs(filename)
 	if err != nil {
-		return err
+		return NewError("Error locating template " + filename + ": " + err.Error())
 	}
 	content, err := ioutil.ReadFile(fn)
 	if err != nil {
-		return err
+		return NewError("Error reading template " + filename + ": " + err.Error())
 	}
 
 	// Create buffer
@@ -217,27 +230,65 @@ func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 		tmpTpl, err := s.tpl.Clone()
 		s.Unlock()
 		if err != nil {
-			return err
+			return NewError("Error cloning template " + filename + ": " + err.Error())
 		}
 
 		// Parse template
 		_, err = tmpTpl.New(fn).Parse(string(content))
 		if err != nil {
-			return err
+			return NewError("Error parsing template " + filename + ": " + err.Error())
 		}
 
 		// Execute template
 		err = tmpTpl.ExecuteTemplate(buff, fn, data)
 		if err != nil {
-			return err
+			return NewError("Error executing template " + filename + ": " + err.Error())
 		}
 	} else {
 		buff.Write(content)
 	}
 
+	// Minifier
+	ext := filepath.Ext(fn)
+	var mime string
+	switch ext {
+	case ".js":
+		mime = "text/javascript"
+	case ".css":
+		mime = "text/css"
+	case ".html":
+		mime = "text/html"
+	}
+
+	result := new(bytes.Buffer)
+	if mime != "" && s.minify {
+		m := minify.New()
+		m.AddFunc("text/css", css.Minify)
+		m.AddFunc("text/html", html.Minify)
+		m.AddFunc("text/javascript", js.Minify)
+
+		// Configure HTML minifier
+		m.Add("text/html", &html.Minifier{
+			KeepDocumentTags: true,
+			KeepEndTags:      true,
+		})
+
+		// Minify
+		err = m.Minify(mime, result, buff)
+		if err != nil {
+			return NewError("Failed to minify " + filename + ": " + err.Error())
+		}
+	} else {
+		result.Write(buff.Bytes())
+	}
+
 	// Flush buffer
-	_, err = w.Write(buff.Bytes())
-	return err
+	_, err = w.Write(result.Bytes())
+	if err != nil {
+		return NewError("Error writing template output " + filename + ": " + err.Error())
+	}
+
+	return nil
 }
 
 // Build compiles all files in the provided directory and outputs the results to the build dir.
@@ -249,16 +300,16 @@ func (s *Service) Build(in, out string) (err error) {
 
 	s.publicDir, err = filepath.Abs(in)
 	if err != nil {
-		return err
+		return NewError("Error locating input directory " + in + ": " + err.Error())
 	}
 	s.buildDir, err = filepath.Abs(out)
 	if err != nil {
-		return err
+		return NewError("Error locating output directory " + in + ": " + err.Error())
 	}
 
 	err = filepath.Walk(s.publicDir, s.buildFn)
 	if err != nil {
-		return err
+		return NewError("Error building output: " + err.Error())
 	}
 
 	return nil
