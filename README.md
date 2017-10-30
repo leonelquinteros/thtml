@@ -19,11 +19,28 @@ go install github.com/leonelquinteros/thtml
 
 ## Quick Start
 
-Check tool usage:
-
 ```
 $ thtml -h
+Usage of thtml:
+  -build
+    	Build the assets from the -public directory to the -output directory by parsing the -templates directory.
+  -exts string
+    	Provides a comma separated filename extensions list to support when parsing templates. (default ".thtml,.html,.css,.js")
+  -listen string
+    	Run the dev server listening on the provided host:port. (default ":5500")
+  -minify
+    	Minify the build output. (default true)
+  -output string
+    	Sets the path for the build output. (default "build")
+  -public string
+    	Sets the path for the web root. (default "public")
+  -run
+    	Run a dev web server serving the public directory.
+  -templates string
+    	Sets the path for the template files. (default "templates")
+
 ```
+
 
 Go template syntax and docs: [https://golang.org/pkg/text/template](https://golang.org/pkg/text/template)
 
