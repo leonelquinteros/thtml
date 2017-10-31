@@ -276,7 +276,9 @@ func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 		// Minify
 		err = m.Minify(mime, result, buff)
 		if err != nil {
-			return NewError("Failed to minify " + filename + ": " + err.Error())
+			// If minify fails, use raw version silently.
+			result.Reset()
+			result.Write(buff.Bytes())
 		}
 	} else {
 		result.Write(buff.Bytes())
