@@ -48,7 +48,7 @@ import (
 )
 
 const (
-	defaultExtensions string = ".thtml .html .js .css"
+	defaultExtensions string = ".html"
 )
 
 // Service is the template handler.

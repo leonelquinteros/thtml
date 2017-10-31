@@ -25,7 +25,7 @@ Usage of thtml:
   -build
     	Build the assets from the -public directory to the -output directory by parsing the -templates directory.
   -exts string
-    	Provides a comma separated filename extensions list to support when parsing templates. (default ".thtml,.html,.css,.js")
+    	Provides a comma separated filename extensions list to support when parsing templates. (default ".html")
   -listen string
     	Run the dev server listening on the provided host:port. (default ":5500")
   -minify
