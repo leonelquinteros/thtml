@@ -76,35 +76,25 @@ import (
 
 // Configuration options
 var (
-	// -public /path/to/public/dir
-	_publicPath string
-
-	// -templates /path/to/templates/dir
-	_templatesPath string
-
-	// -build
+	// Actions
 	_build bool
+	_run   bool
+	_init  bool
 
-	// -output
-	_outputPath string
-
-	// -run
-	_run bool
-
-	// -listen ":5500"
-	_httpListen string
-
-	// -minify
-	_minify bool
-
-	// -exts .html,.css,.js
-	_exts string
+	// Configuration
+	_publicPath    string
+	_templatesPath string
+	_outputPath    string
+	_exts          string
+	_minify        bool
+	_httpListen    string
 )
 
 func init() {
 	// Parse config flags
-	flag.BoolVar(&_run, "run", false, "Run a dev web server serving the public directory.")
 	flag.BoolVar(&_build, "build", false, "Build the assets from the -public directory to the -output directory by parsing the -templates directory.")
+	flag.BoolVar(&_run, "run", false, "Run a dev web server serving the public directory.")
+	flag.BoolVar(&_init, "init", false, "Creates a new project structure into the current directory.")
 	flag.BoolVar(&_minify, "minify", true, "Minify the build output.")
 	flag.StringVar(&_publicPath, "public", "public", "Sets the path for the web root.")
 	flag.StringVar(&_templatesPath, "templates", "templates", "Sets the path for the template files.")
@@ -116,7 +106,7 @@ func init() {
 func main() {
 	flag.Parse()
 
-	if !_run && !_build {
+	if !_run && !_build && !_init {
 		fmt.Println("")
 		fmt.Println("Run:")
 		fmt.Println("     ", os.Args[0], "-h")
@@ -126,7 +116,12 @@ func main() {
 		return
 	}
 
-	// Build first
+	// Init first
+	if _init {
+		create()
+	}
+
+	// Build if requested
 	if _build {
 		build()
 	}

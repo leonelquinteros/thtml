@@ -1,23 +1,29 @@
-{{ template "views/primary.html" }}
+{{ template "layouts/default.html" }}
 
-{{ define "layout-title" }}Index title{{ end }}
+{{ define "layout-title" }}Home title{{ end }}
 
 {{ define "view-content" }}
 
     <h1>Home page</h1>
 
     <p>
+        <img class="img-fluid" src="/img/bg-banner.jpg" alt="Image" />
+        <br />
+        
         <small>
-            This page is rendered from <em>public/index.html</em>
+            Edit <code>public/index.html</code> to change this page
         </small>
     </p>
 
     <p>
-        <img class="img-fluid" src="/img/bg-banner.jpg" alt="Image" />
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
 
-        <br />
-        <br />
-        <button class="btn btn-primary">I'm a button!</button>
+    <p>
+        <a href="/page.html" class="btn btn-primary">I'm a button!</a>
     </p>
 
 {{ end }}

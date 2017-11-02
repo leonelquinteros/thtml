@@ -1,35 +1,20 @@
-<!doctype html>
-<html lang="{{ block "layout-html-lang" . }}en{{ end }}">
-    <head>
-        <title>{{ block "layout-title" . }}{{ end }} - Layout title</title>
+{{ template "components/head.html" }}
 
-        <!-- Required meta tags for Bootstrap -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="/css/bootstrap.min.css">
-
-        {{ block "layout-head" . }}{{ end }}
-    </head>
-    <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <small>
-                        The layout is rendered from <em>templates/layouts/default.html</em>
-                    </small>
-                </div>
-            </div>
-            {{ template "components/nav.html" }}
-
-            {{ block "layout-content" . }}{{ end }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <small>
+                Edit <code>templates/layouts/default.html</code> to change this layout
+            </small>
         </div>
+    </div>
+    {{ template "components/nav.html" }}
 
-        <script src="/js/jquery-3.2.1.slim.min.js"></script>
-        <script src="/js/popper.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
+    <div class="row">
+        <div class="col-md-12">
+            {{ block "view-content" . }}{{ end }}
+        </div>
+    </div>
+</div>
 
-        {{ block "layout-script" . }}{{ end }}
-    </body>
-</html>
+{{ template "components/footer.html" }}

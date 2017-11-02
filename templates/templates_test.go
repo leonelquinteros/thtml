@@ -54,8 +54,10 @@ func TestLoad(t *testing.T) {
 	loaded := s.tpl.Templates()
 	expected := []string{
 		"components/nav.html",
+		"components/head.html",
+		"components/footer.html",
 		"layouts/default.html",
-		"views/primary.html",
+		"layouts/two-columns.html",
 	}
 
 	for _, e := range expected {

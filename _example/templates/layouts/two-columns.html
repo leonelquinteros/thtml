@@ -1,0 +1,30 @@
+{{ template "components/head.html" }}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <small>
+                Edit <code>templates/layouts/two-columns.html</code> to change this layout
+            </small>
+        </div>
+    </div>
+    {{ template "components/nav.html" }}
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ block "view-title" . }}View title{{ end }}</h1>
+            <hr />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ block "left-column" . }}{{ end }}
+        </div>
+        <div class="col-md-6">
+            {{ block "right-column" . }}{{ end }}
+        </div>
+    </div>
+</div>
+
+{{ template "components/footer.html" }}
