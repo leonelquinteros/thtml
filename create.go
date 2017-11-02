@@ -24,7 +24,6 @@ func create() {
 		"public/js",
 		"public/img",
 		"templates/layouts",
-		"templates/views",
 		"templates/components",
 	}
 
@@ -38,9 +37,11 @@ func create() {
 		"public/js/popper.min.js",
 		"public/index.html",
 		"public/page.html",
+		"templates/components/footer.html",
+		"templates/components/head.html",
 		"templates/components/nav.html",
 		"templates/layouts/default.html",
-		"templates/views/primary.html",
+		"templates/layouts/two-columns.html",
 	}
 
 	log.Println("=> Creating directory structure...")
