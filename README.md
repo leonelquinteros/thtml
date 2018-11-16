@@ -10,7 +10,7 @@
 Static site generator based on Go's text/template with development web server integrated. 
 
 
-## Install
+## Install latest version using Go
 
 ```
 go install github.com/leonelquinteros/thtml
