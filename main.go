@@ -98,7 +98,7 @@ func init() {
 	flag.BoolVar(&_minify, "minify", true, "Minify the build output.")
 	flag.StringVar(&_publicPath, "public", "public", "Sets the path for the web root.")
 	flag.StringVar(&_templatesPath, "templates", "templates", "Sets the path for the template files.")
-	flag.StringVar(&_httpListen, "listen", ":5500", "Run the dev server listening on the provided host:port.")
+	flag.StringVar(&_httpListen, "listen", "localhost:5500", "Run the dev server listening on the provided host:port.")
 	flag.StringVar(&_outputPath, "output", "build", "Sets the path for the build output.")
 	flag.StringVar(&_exts, "exts", ".html", "Provides a comma separated filename extensions list to support when parsing templates.")
 }
