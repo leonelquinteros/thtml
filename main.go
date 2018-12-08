@@ -95,7 +95,7 @@ func init() {
 	flag.BoolVar(&_build, "build", false, "Build the assets from the -public directory to the -output directory by parsing the -templates directory.")
 	flag.BoolVar(&_run, "run", false, "Run a dev web server serving the public directory.")
 	flag.BoolVar(&_init, "init", false, "Creates a new project structure into the current directory.")
-	flag.BoolVar(&_minify, "minify", true, "Minify the build output.")
+	flag.BoolVar(&_minify, "minify", false, "Minify the build output.")
 	flag.StringVar(&_publicPath, "public", "public", "Sets the path for the web root.")
 	flag.StringVar(&_templatesPath, "templates", "templates", "Sets the path for the template files.")
 	flag.StringVar(&_httpListen, "listen", "localhost:5500", "Run the dev server listening on the provided host:port.")

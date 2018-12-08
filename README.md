@@ -29,7 +29,7 @@ Usage of thtml:
   -listen string
     	Run the dev server listening on the provided host:port. (default ":5500")
   -minify
-    	Minify the build output. (default true)
+    	Minify the build output. (default false)
   -output string
     	Sets the path for the build output. (default "build")
   -public string

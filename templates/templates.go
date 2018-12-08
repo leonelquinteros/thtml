@@ -41,10 +41,10 @@ import (
 	"sync"
 	"text/template"
 
-	"github.com/tdewolff/minify"
-	"github.com/tdewolff/minify/css"
-	"github.com/tdewolff/minify/html"
-	"github.com/tdewolff/minify/js"
+	"github.com/tdewolff/minify/v2"
+	"github.com/tdewolff/minify/v2/css"
+	"github.com/tdewolff/minify/v2/html"
+	"github.com/tdewolff/minify/v2/js"
 )
 
 const (
@@ -269,16 +269,15 @@ func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 
 		// Configure HTML minifier
 		m.Add("text/html", &html.Minifier{
-			KeepDocumentTags: true,
-			KeepEndTags:      true,
+			KeepConditionalComments: true,
+			KeepDocumentTags:        true,
+			KeepEndTags:             true,
 		})
 
 		// Minify
 		err = m.Minify(mime, result, buff)
 		if err != nil {
-			// If minify fails, use raw version silently.
-			result.Reset()
-			result.Write(buff.Bytes())
+			return NewError("Error minifying " + filename + ": " + err.Error())
 		}
 	} else {
 		result.Write(buff.Bytes())
