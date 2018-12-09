@@ -264,8 +264,8 @@ func (s *Service) Render(w io.Writer, filename string, data interface{}) error {
 	if mime != "" && s.minify {
 		m := minify.New()
 		m.AddFunc("text/css", css.Minify)
-		m.AddFunc("text/html", html.Minify)
 		m.AddFunc("text/javascript", js.Minify)
+		m.AddFunc("application/javascript", js.Minify)
 
 		// Configure HTML minifier
 		m.Add("text/html", &html.Minifier{
@@ -305,9 +305,16 @@ func (s *Service) Build(in, out string) (err error) {
 	}
 	s.buildDir, err = filepath.Abs(out)
 	if err != nil {
-		return NewError("Error locating output directory " + in + ": " + err.Error())
+		return NewError("Error locating output directory " + out + ": " + err.Error())
 	}
 
+	// Remove existent build
+	err = os.RemoveAll(s.buildDir)
+	if err != nil {
+		return NewError("Error cleaning output directory " + out + ": " + err.Error())
+	}
+
+	// Build
 	err = filepath.Walk(s.publicDir, s.buildFn)
 	if err != nil {
 		return NewError("Error building output: " + err.Error())
@@ -326,6 +333,7 @@ func (s *Service) buildFn(filename string, info os.FileInfo, err error) error {
 			return err
 		}
 
+		// Recreate directories
 		err = os.MkdirAll(path.Dir(out), 0755)
 		if err != nil {
 			return err
@@ -339,7 +347,6 @@ func (s *Service) buildFn(filename string, info os.FileInfo, err error) error {
 		defer f.Close()
 
 		// Render
-
 		return s.Render(f, filename, nil)
 	}
 
