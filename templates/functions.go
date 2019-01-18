@@ -8,7 +8,7 @@ import (
 
 // FuncMap is passed to the template object that renders every view
 var FuncMap = template.FuncMap{
-	"id": ID,
+	"ID": ID,
 }
 
 // ID returns a random [8]byte value encoded as hex string.
