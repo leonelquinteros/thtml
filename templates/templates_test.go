@@ -91,6 +91,7 @@ func TestRender(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+	t.Log(buff.String())
 	buff.Reset()
 }
 

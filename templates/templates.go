@@ -167,6 +167,9 @@ func (s *Service) Load(dir string) error {
 	// Init template
 	s.tpl = template.New(s.tplDir)
 
+	// Add functions
+	s.tpl.Funcs(FuncMap)
+
 	// Load
 	err = filepath.Walk(s.tplDir, s.loadFn)
 	if err != nil {
