@@ -23,23 +23,25 @@ go install github.com/leonelquinteros/thtml
 $ thtml -h
 Usage of thtml:
   -build
-        Build the assets from the -public directory to the -output directory by parsing the -templates directory.
+    	Build the assets from the -public directory to the -output directory by parsing the -templates directory.
   -exts string
-        Provides a comma separated filename extensions list to support when parsing templates. (default ".html")
+    	Provides a comma separated filename extensions list to support when parsing templates. (default ".html")
   -init
-        Creates a new project structure into the current directory.
+    	Creates a new project structure into the current directory.
   -listen string
-        Run the dev server listening on the provided host:port. (default "localhost:5500")
+    	Run the dev server listening on the provided host:port. (default "localhost:5500")
   -minify
-        Minify the build output. (default true)
+    	Minify the build output. (default true)
   -output string
-        Sets the path for the build output. (default "build")
+    	Sets the path for the build output. (default "build")
   -public string
-        Sets the path for the web root. (default "public")
+    	Sets the path for the web root. (default "public")
   -run
-        Run a dev web server serving the public directory.
+    	Run a dev web server serving the public directory.
   -templates string
-        Sets the path for the template files. (default "templates")
+    	Sets the path for the template files. (default "templates")
+  -version
+    	Prints version number.
 
 ```
 
