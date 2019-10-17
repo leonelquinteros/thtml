@@ -108,7 +108,7 @@ func init() {
 }
 
 func printVersion() {
-	fmt.Printf("thtml version %s", version)
+	fmt.Printf("thtml version %s \n", version)
 }
 
 func main() {
