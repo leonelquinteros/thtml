@@ -74,12 +74,15 @@ import (
 	"os"
 )
 
+const version = "1.1.0"
+
 // Configuration options
 var (
 	// Actions
-	_build bool
-	_run   bool
-	_init  bool
+	_version bool
+	_build   bool
+	_run     bool
+	_init    bool
 
 	// Configuration
 	_publicPath    string
@@ -92,6 +95,7 @@ var (
 
 func init() {
 	// Parse config flags
+	flag.BoolVar(&_version, "version", false, "Prints version number.")
 	flag.BoolVar(&_build, "build", false, "Build the assets from the -public directory to the -output directory by parsing the -templates directory.")
 	flag.BoolVar(&_run, "run", false, "Run a dev web server serving the public directory.")
 	flag.BoolVar(&_init, "init", false, "Creates a new project structure into the current directory.")
@@ -103,10 +107,14 @@ func init() {
 	flag.StringVar(&_exts, "exts", ".html", "Provides a comma separated filename extensions list to support when parsing templates.")
 }
 
+func printVersion() {
+	fmt.Printf("thtml version %s", version)
+}
+
 func main() {
 	flag.Parse()
 
-	if !_run && !_build && !_init {
+	if !_run && !_build && !_init && !_version {
 		fmt.Println("")
 		fmt.Println("Run:")
 		fmt.Println("     ", os.Args[0], "-h")
@@ -116,7 +124,12 @@ func main() {
 		return
 	}
 
-	// Init first
+	// Print version
+	if _version {
+		printVersion()
+	}
+
+	// Init
 	if _init {
 		create()
 	}
